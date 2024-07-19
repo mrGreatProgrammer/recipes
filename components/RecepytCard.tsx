@@ -29,7 +29,7 @@ interface RecepyCardProps /* extends IRecepy */ {
 
 const RecepyCard:React.FC<RecepyCardProps> = ({name, id, images, kkal}) => {
   return (
-      <Card className="w-[350px]">
+      <Card >
         <Image src={"https://github.com/shadcn.png"} alt={`t-${id}-${name}`} width={350} height={100} className="rounded-md" />
         <CardHeader>
           <CardTitle>{name}</CardTitle>

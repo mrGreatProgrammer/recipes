@@ -1,7 +1,18 @@
-import RecepyCard from "@/components/RecepytCard";
-import { db } from "@/utils/db";
+import ResipeisContainer from "@/components/ResipeisContainer";
+import SkeletonProductsContainer from "@/components/SkeletonProductsContainer";
+import { Suspense } from "react";
 
-export default async function Home() {
+export default async function Home({
+  searchParams,
+}: {
+  searchParams?: {
+    query?: string;
+    page?: string;
+  };
+}) {
+  const query = searchParams?.query || '';
+  const currentPage = Number(searchParams?.page) || 1;
+  console.log( "searchParams---", searchParams)
 
   // const recepies = await db.Recepy.findMany({
   //   include: {
@@ -24,19 +35,13 @@ export default async function Home() {
   return (
     <main>
       <div className="container mx-auto py-5">
-        <div></div>
-        <div className="grid grid-cols-5">
-          {/* {recepies?.map(item=> <RecepyCard 
-{...item}
-          />)} */}
-          <RecepyCard 
-          id={1}
-          images={""}
-          kkal={200}
-          name="hii"
-          />
+        <div>
+
         </div>
-      </div>
+        <Suspense key={query + currentPage} fallback={<SkeletonProductsContainer />}>
+        <ResipeisContainer searchParams={searchParams} />
+      </Suspense>
+              </div>
     </main>
   );
 }

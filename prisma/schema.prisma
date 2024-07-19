@@ -13,13 +13,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String
-  email     String   @unique
-  password  String
-  role      Role     @default(USER)
+  id       Int    @id @default(autoincrement())
+  name     String
+  email    String @unique
+  password String
+  role     Role   @default(USER)
 }
 
 enum Role {
@@ -28,43 +27,44 @@ enum Role {
 }
 
 model Image {
-  id     Int    @id @default(autoincrement())
-  link   String
-  altTxt String
-  recepy Recepy? @relation(fields: [recepyId], references: [id])
+  id       Int     @id @default(autoincrement())
+  link     String
+  altTxt   String
+  recepy   Resepe? @relation(fields: [recepyId], references: [id])
   recepyId Int?
 }
 
-model Recepy {
-  id           Int                @id @default(autoincrement())
-  name         String
-  description  String
-  cookTimer    String
-  kkal         Float
-  fat          Float
-  carbs        Float
-  protein      Float
-  totalWeight  Float
-  categories   String[]
-  images       Image[]
-  ingredients  IngredientsRecepy[]
+model Resepe {
+  id          Int                 @id @default(autoincrement())
+  name        String
+  description String
+  cookTimer   String
+  kkal        Float
+  fat         Float
+  carbs       Float
+  protein     Float
+  totalWeight Float
+  categories  String[]
+  images      Image[]
+  ingredients IngredientsRecepy[]
 
-  createdAt DateTime   @default(now())
+  createdAt DateTime @default(now())
+	@@map("Recepy")
 }
 
 model IngredientsRecepy {
-  id          Int         @id @default(autoincrement())
-  weight      Float?
-  count       Int?
-  ingredient  Ingredient  @relation(fields: [ingredientId], references: [id])
+  id           Int        @id @default(autoincrement())
+  weight       Float?
+  count        Int?
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
   ingredientId Int
-  recepy      Recepy      @relation(fields: [recepyId], references: [id])
-  recepyId    Int
+  recepy       Resepe     @relation(fields: [recepyId], references: [id])
+  recepyId     Int
 }
 
 model Ingredient {
-  id   Int    @id @default(autoincrement())
-  name String
-  slug String
+  id                Int                 @id @default(autoincrement())
+  name              String
+  slug              String
   ingredientsRecepy IngredientsRecepy[]
 }
