@@ -74,7 +74,7 @@ const EditResepeForm = ({
   const [ings, setIngs] = React.useState<Ingredient[] | undefined>();
   const [categories, setCategories] = React.useState<Category[] | undefined>();
   const { toast } = useToast();
-  const c = categoriesData?.find((e) => e)?.id;
+  const c = categoriesData?.find((e:any) => e)?.id;
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
