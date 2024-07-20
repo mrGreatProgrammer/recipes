@@ -8,12 +8,12 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "./ui/form";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
 import { User } from "next-auth";
+import { useToast } from "./ui/use-toast";
 
 const formSchema = z.object({
   text: z
@@ -35,19 +35,27 @@ const CommetnsForm: React.FC<{
       text: "",
     },
   });
+  const { toast } = useToast();
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
     const r = await fetch(`http://localhost:3000/api/comments`, {
       method: "POST",
       body: JSON.stringify({ ...values, userId: user?.id, resepeId }),
     })
       .then((r) => {
+        toast({
+            title: "Успешно!",
+            description: "Рецепт успешно добавлен!",
+          });
+
         return r.json();
       })
       .catch((err) => {
         console.error(err);
-        toast.error(err.message);
+        toast({
+            title: "Ошибка!",
+            description: "Ошибка при добавлении рецепта!",
+          });
       })
       .finally(() => {
         form.reset();

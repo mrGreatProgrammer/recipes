@@ -6,8 +6,6 @@ export interface IUser {
   role: "admin" | "user";
 }
 
-enum ECategory {}
-
 type id = string | number;
 
 export interface Iimage {

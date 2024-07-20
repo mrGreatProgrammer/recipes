@@ -2,10 +2,10 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { CreateUserInput, createUserSchema } from "@/lib/user-schema";
+import { useToast } from "./ui/use-toast";
 
 export const RegisterForm = () => {
   const [submitting, setSubmitting] = useState(false);
@@ -19,6 +19,7 @@ export const RegisterForm = () => {
     register,
     formState: { errors },
   } = methods;
+  const { toast } = useToast();
 
   const onSubmitHandler: SubmitHandler<CreateUserInput> = async (values) => {
     try {
@@ -36,19 +37,28 @@ export const RegisterForm = () => {
 
         if (Array.isArray(errorData.errors) && errorData.errors.length > 0) {
           errorData.errors.forEach((error: any) => {
-            toast.error(error.message);
+            toast({
+              title: "Ошибка!",
+              description: error.message,
+            });
           });
 
           return;
         }
 
-        toast.error(errorData.message);
+        toast({
+          title: "Ошибка!",
+          description: errorData.message,
+        });
         return;
       }
 
       signIn(undefined, { callbackUrl: "/" });
     } catch (error: any) {
-      toast.error(error.message);
+      toast({
+        title: "Ошибка!",
+        description: error.message,
+      });
     } finally {
       setSubmitting(false);
     }

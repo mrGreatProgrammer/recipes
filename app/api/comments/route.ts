@@ -23,16 +23,6 @@ export async function POST(request: Request) {
       text,
       user_id: userId,
       resepe_id: resepeId,
-
-      // resepe:{
-      //     create: {
-
-      //     }
-      // }
-
-      // user: {
-
-      // },
     },
   });
 

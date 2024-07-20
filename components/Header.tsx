@@ -17,12 +17,7 @@ const Header = async () => {
           <span className="ml-3 text-xl">Рецепты</span>
         </Link>
         <nav className="md:ml-auto md:mr-auto flex flex-wrap items-center text-base justify-center">
-          {/* <FilterForm /> */}
           <FilterSearchForm />
-          {/* <Link href="/" className="mr-5 hover:text-gray-900">Главная</Link>
-          <Link href="/reciepe" className="mr-5 hover:text-gray-900">Добавить рецепт</Link>
-          <Link href="/category" className="mr-5 hover:text-gray-900">Категории</Link>
-          <Link href="/ingredients" className="mr-5 hover:text-gray-900">Ингредиенты</Link> */}
         </nav>
         {user ? (
           <>

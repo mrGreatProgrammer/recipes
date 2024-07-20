@@ -3,19 +3,16 @@ import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { IRecepy } from "@/types/app";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
@@ -34,7 +31,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import toast from "react-hot-toast";
+import { useToast } from "./ui/use-toast";
 
 const formSchema = z.object({
   name: z.string().min(3, {
@@ -76,6 +73,7 @@ const EditResepeForm = ({
   const [images, setImages] = React.useState<any>(null);
   const [ings, setIngs] = React.useState<Ingredient[] | undefined>();
   const [categories, setCategories] = React.useState<Category[] | undefined>();
+  const { toast } = useToast();
   const c = categoriesData?.find((e) => e)?.id;
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -96,7 +94,6 @@ const EditResepeForm = ({
 
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values, "images", images);
     const data = {
         ...values,
         carbs: Number(values.carbs),
@@ -110,12 +107,18 @@ const EditResepeForm = ({
       body: JSON.stringify(data),
     })
       .then((r) => {
-        toast.success("Рецепт успешно изменён!");
-        // form.reset();
+        toast({
+            title: "Успешно!",
+            description: "Рецепт успешно изменён!",
+          });
+        form.reset();
       })
       .catch((err) => {
         console.error(err);
-        toast.error(err.message);
+        toast({
+            title: "Ошибка!",
+            description: "Ошибка при изменении рецепта!",
+          });
       })
       .finally(() => {
       });
@@ -144,8 +147,6 @@ const EditResepeForm = ({
     name: "ingredients",
     control: form.control,
   });
-
-  //   console.log("form", form.formState.defaultValues, "fields", form);
 
   return (
     <main>
@@ -393,7 +394,7 @@ const EditResepeForm = ({
                   className="my-5"
                   onClick={(e) => {
                     e.preventDefault();
-                    append({ id: "", count: "0", weight: "0" });
+                    append({ id: "", count: 0, weight: 0 });
                   }}
                 >
                   Добавить ингридиент
@@ -401,7 +402,7 @@ const EditResepeForm = ({
               </CardFooter>
             </Card>
 
-            <Button type="submit">Submit</Button>
+            <Button type="submit">Изменить рецепт</Button>
           </form>
         </Form>
       </div>

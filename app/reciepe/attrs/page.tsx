@@ -3,26 +3,20 @@ import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { IRecepy } from "@/types/app";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import toast from "react-hot-toast";
+import { useToast } from "@/components/ui/use-toast";
 
-const formShema = z.object(
-  /* <IRecepy> */ {
+const formShema = z.object( {
     name: z.string().min(3, {
       message: "Название должно быть не меньше трех букв",
     }),
@@ -31,8 +25,6 @@ const formShema = z.object(
 );
 
 export default function CreateAttrs() {
-  
-
   const formCategories = useForm<z.infer<typeof formShema>>({
     resolver: zodResolver(formShema),
     defaultValues: {
@@ -45,17 +37,26 @@ export default function CreateAttrs() {
       name: "",
     },
   });
+  const { toast } = useToast();
 
   function onSubmitCategory(values: z.infer<typeof formShema>) {
-    console.log(values);
     fetch(`http://localhost:3000/api/category`, {
       method: "POST",
       body: JSON.stringify(values),
     })
       .then((r) => {
-        toast.success('Категория успешно добавлено!');
+        toast({
+          title: "Успешно!",
+          description: "Категория успешна добавлена!",
+        });
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        console.error(err);
+        toast({
+          title: "Ошибка!",
+          description: "Ошибка при изменении категрии!",
+        });
+      });
   }
   function onSubmitIng(values: z.infer<typeof formShema>) {
     fetch(`http://localhost:3000/api/ingredients`, {
@@ -63,14 +64,22 @@ export default function CreateAttrs() {
       body: JSON.stringify(values),
     })
       .then((r) => {
-        toast.success('Ингридиент успешно добавлен!');
+        toast({
+          title: "Успешно!",
+          description: "Ингридиент успешна добавлена!",
+        });
       })
-      .catch((err) => {console.error(err); toast.error('Ошибка пожалуйста попробуйте позже!');});
+      .catch((err) => {
+        console.error(err);
+        toast({
+          title: "Ошибка!",
+          description: "Ошибка при изменении ингрдиента!",
+        });
+      });
   }
 
   return (
     <main>
-      
       <div className="container mx-auto py-5">
         <h1 className="text-3xl font-semibold mb-5">Добавить новые атрибуты</h1>
         <Card className="flex flex-col my-5 py-5">

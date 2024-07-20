@@ -5,16 +5,16 @@ import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import toast from 'react-hot-toast';
 import { signIn } from 'next-auth/react';
 import { LoginUserInput, loginUserSchema } from '@/lib/user-schema';
-
+import { useToast } from './ui/use-toast';
 
 
 export const LoginForm = () => {
   const router = useRouter();
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const { toast } = useToast();
 
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl') || '/profile';
@@ -44,16 +44,25 @@ export const LoginForm = () => {
       setSubmitting(false);
 
       if (!res?.error) {
-        toast.success('successfully logged in');
+        toast({
+          title: "Успешно!",
+          description: "Успешный логин!",
+        });
         router.push(callbackUrl);
       } else {
         reset({ password: '' });
         const message = 'invalid email or password';
-        toast.error(message);
+        toast({
+          title: "Ошибка!",
+          description: message,
+        });
         setError(message);
       }
     } catch (error: any) {
-      toast.error(error.message);
+      toast({
+        title: "Ошибка!",
+        description: error.message,
+      });
       setError(error.message);
     } finally {
       setSubmitting(false);

@@ -8,14 +8,12 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { IRecepy } from "@/types/app";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
@@ -34,7 +32,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import toast from "react-hot-toast";
+import { useToast } from "@/components/ui/use-toast";
 
 const formSchema = z.object({
   name: z.string().min(3, {
@@ -64,6 +62,7 @@ export default function CreateRecepe() {
   const [images, setImages] = React.useState<any>(null);
   const [ings, setIngs] = React.useState<Ingredient[] | undefined>();
   const [categories, setCategories] = React.useState<Category[] | undefined>();
+  const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -79,11 +78,17 @@ export default function CreateRecepe() {
       body: JSON.stringify(values),
     })
       .then((r) => {
-        toast.success("Рецепт успешно добавлен!");
+        toast({
+          title: "Успешно!",
+          description: "Рецепт успешно добавлен!",
+        });
       })
       .catch((err) => {
         console.error(err);
-        toast.error(err.message);
+        toast({
+          title: "Ошибка!",
+          description: "Ошибка при добавлении рецепта!",
+        });
       })
       .finally(() => {
         form.reset();
@@ -369,7 +374,7 @@ export default function CreateRecepe() {
               </CardFooter>
             </Card>
 
-            <Button type="submit">Submit</Button>
+            <Button type="submit">Опубликовать рецепт</Button>
           </form>
         </Form>
       </div>

@@ -4,8 +4,6 @@ export async function GET(request: Request) {
   const { query, kkalStart, kkalEnd, cookTimeStart, cookTimeEnd } =
     await request.json();
 
-  const filter = {};
-
   const resepes = await db.resepe.findMany({
     include: {
       images: true,
@@ -56,11 +54,9 @@ export async function POST(request: Request) {
   const ings = ingredients.map(
     (e: { id: number; weight: number; count: number }) => {
       return {
-        // create: {
         ingredientId: Number(e.id),
         weight: Number(e.weight),
         count: Number(e.count),
-        // },
       };
     }
   );
@@ -84,7 +80,6 @@ export async function POST(request: Request) {
     },
   });
 
-  console.log("add resepe", resepe);
 
   return Response.json({ message: "Успешно добавленно!", resepe, ings });
 }

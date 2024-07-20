@@ -12,7 +12,6 @@ export default async function Home({
 }) {
   const query = searchParams?.query || "";
   const currentPage = Number(searchParams?.page) || 1;
-  console.log("searchParams---", searchParams);
 
   return (
     <main>

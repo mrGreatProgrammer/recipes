@@ -1,16 +1,5 @@
-import Image from "next/image";
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
-import ChartRecipe from "@/components/ChartRecipe";
 import { db } from "@/utils/db";
 import { auth } from "@/auth";
-import CommentsContainer from "@/components/CommentsContainer";
 import EditResepeForm from "@/components/EditResepeForm";
 
 export default async function RecepeEdit({
@@ -25,7 +14,6 @@ export default async function RecepeEdit({
     where: { id: Number(id) },
     include: {
       images: true,
-      // categories: { include: { category: true } },
       ingredients: {
         include: {
           ingredient: true,
