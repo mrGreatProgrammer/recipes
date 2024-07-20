@@ -1,7 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
-// import { useRouter } from 'next/router';
-// import { usePrismaClient } from '@prisma/client';
+import React from "react";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 
 import { Input } from "./ui/input";
@@ -13,6 +11,9 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Label } from "./ui/label";
+import { Ingredient } from "@prisma/client";
+import { useToast } from "./ui/use-toast";
+import { Toaster } from "./ui/toaster";
 
 function Search({
   placeholder,
@@ -43,6 +44,26 @@ function Search({
 }
 
 const FilterSearchForm: React.FC = () => {
+  const [ings, setIngs] = React.useState<Ingredient[] | undefined>();
+  const { toast } = useToast();
+
+  React.useEffect(() => {
+    const res = fetch(`http://localhost:3000/api/ingredients`, {
+      method: "OPTIONS",
+    })
+      .then((r) => {
+        return r.json();
+      })
+
+      .catch((err) => console.error(err));
+
+    res.then((r) => {
+      setIngs(r);
+      toast({
+        description: "Your message has been sent.",
+      });
+    });
+  }, []);
   //   const [searchText, setSearchText] = useState('');
   //   const [category, setCategory] = useState('all');
   //   const router = useRouter();
@@ -110,42 +131,46 @@ const FilterSearchForm: React.FC = () => {
   }
 
   return (
-    <div className="grid grid-cols-3 gap-2">
-      <Search
-        placeholder="Поиск..."
-        onChange={onChange}
-        defaultValue={searchParams.get("query")?.toString()}
-      />
-      <Input
-        name="kkal"
-        placeholder="ккалории"
-        onChange={(e) => {
-          onChange(e.target.name, e.target.value);
-        }}
-        defaultValue={searchParams.get("kkal")?.toString()}
-        type="number"
-      />
-      <div className="flex flex-col space-y-1.5">
-        {/* <Label htmlFor="ingredients">Ингридиенты</Label> */}
-        <Select
-          name="ingredients"
-          defaultValue={searchParams.get("ingredients")?.toString()}
-          onValueChange={(v) => {
-            onChange("ingredients", v);
+    <>
+      <div className="grid grid-cols-3 gap-2">
+        <Search
+          placeholder="Поиск..."
+          onChange={onChange}
+          defaultValue={searchParams.get("query")?.toString()}
+        />
+        <Input
+          name="kkal"
+          placeholder="ккалории"
+          onChange={(e) => {
+            onChange(e.target.name, e.target.value);
           }}
-        >
-          <SelectTrigger id="ingredients">
-            <SelectValue placeholder="Ингридиенты" />
-          </SelectTrigger>
-          <SelectContent position="popper">
-            <SelectItem value="next">Next.js</SelectItem>
-            <SelectItem value="sveltekit">SvelteKit</SelectItem>
-            <SelectItem value="astro">Astro</SelectItem>
-            <SelectItem value="nuxt">Nuxt.js</SelectItem>
-          </SelectContent>
-        </Select>
+          defaultValue={searchParams.get("kkal")?.toString()}
+          type="number"
+        />
+        <div className="flex flex-col space-y-1.5">
+          {/* <Label htmlFor="ingredients">Ингридиенты</Label> */}
+          <Select
+            name="ingredients"
+            defaultValue={searchParams.get("ingredients")?.toString()}
+            onValueChange={(v) => {
+              onChange("ingredients", v);
+            }}
+          >
+            <SelectTrigger id="ingredients">
+              <SelectValue placeholder="Ингридиенты" />
+            </SelectTrigger>
+            <SelectContent position="popper">
+              {ings?.map((e) => (
+                <SelectItem key={`${e.name}-${e.id}`} value={`${e.id}`}>
+                  {e.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
-    </div>
+      <Toaster />
+    </>
   );
 };
 
