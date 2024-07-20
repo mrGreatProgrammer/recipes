@@ -12,7 +12,6 @@ import {
 } from "./ui/select";
 import { Label } from "./ui/label";
 import { Ingredient } from "@prisma/client";
-import { useToast } from "./ui/use-toast";
 import { Toaster } from "./ui/toaster";
 
 function Search({
@@ -45,7 +44,6 @@ function Search({
 
 const FilterSearchForm: React.FC = () => {
   const [ings, setIngs] = React.useState<Ingredient[] | undefined>();
-  const { toast } = useToast();
 
   React.useEffect(() => {
     const res = fetch(`http://localhost:3000/api/ingredients`, {
@@ -59,9 +57,6 @@ const FilterSearchForm: React.FC = () => {
 
     res.then((r) => {
       setIngs(r);
-      toast({
-        description: "Your message has been sent.",
-      });
     });
   }, []);
   //   const [searchText, setSearchText] = useState('');

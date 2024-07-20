@@ -28,7 +28,7 @@ export default async function Recepe({
     where: { id: Number(id) },
     include: {
       images: true,
-      categories: { include: { category: true } },
+      // categories: { include: { category: true } },
       ingredients: {
         include: {
           ingredient: true,

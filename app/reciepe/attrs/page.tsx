@@ -19,8 +19,7 @@ import { IRecepy } from "@/types/app";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useToast } from "@/components/ui/use-toast";
-import { Toaster } from "@/components/ui/toaster";
+import toast from "react-hot-toast";
 
 const formShema = z.object(
   /* <IRecepy> */ {
@@ -32,7 +31,7 @@ const formShema = z.object(
 );
 
 export default function CreateAttrs() {
-  const { toast } = useToast();
+  
 
   const formCategories = useForm<z.infer<typeof formShema>>({
     resolver: zodResolver(formShema),
@@ -54,10 +53,7 @@ export default function CreateAttrs() {
       body: JSON.stringify(values),
     })
       .then((r) => {
-        toast({
-          title: "Успегтно добавленно!",
-          description: `Категория успешно добавлено!`,
-        });
+        toast.success('Категория успешно добавлено!');
       })
       .catch((err) => console.error(err));
   }
@@ -67,12 +63,9 @@ export default function CreateAttrs() {
       body: JSON.stringify(values),
     })
       .then((r) => {
-        toast({
-          title: "Успешно добавленно!",
-          description: `Ингридиент успешно добавлен!`,
-        });
+        toast.success('Ингридиент успешно добавлен!');
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {console.error(err); toast.error('Ошибка пожалуйста попробуйте позже!');});
   }
 
   return (
