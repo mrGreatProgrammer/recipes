@@ -25,6 +25,8 @@ model User {
   accounts      Account[]
   sessions      Session[]
 
+  comments Comment[]
+
   @@map("users")
 }
 
@@ -94,8 +96,11 @@ model Resepe {
   images      Image[]
   ingredients IngredientsRecepy[]
 
+  comments Comment[]
+
   createdAt DateTime @default(now())
-	@@map("Recepy")
+
+  @@map("Recepy")
 }
 
 model IngredientsRecepy {
@@ -114,17 +119,29 @@ model Ingredient {
   slug              String
   ingredientsRecepy IngredientsRecepy[]
 }
+
 model CategoriesResepe {
-  id           Int        @id @default(autoincrement())
+  id         Int      @id @default(autoincrement())
   category   Category @relation(fields: [categoryId], references: [id])
   categoryId Int
-  recepy       Resepe     @relation(fields: [recepyId], references: [id])
-  recepyId     Int
+  recepy     Resepe   @relation(fields: [recepyId], references: [id])
+  recepyId   Int
 }
 
 model Category {
-  id                Int                 @id @default(autoincrement())
-  name              String
-  slug              String
+  id               Int                @id @default(autoincrement())
+  name             String
+  slug             String
   categoriesRecepy CategoriesResepe[]
+}
+
+model Comment {
+  id        Int    @id @default(autoincrement())
+  text      String
+  user_id   String
+  resepe_id Int
+  user      User   @relation(fields: [user_id], references: [id])
+  resepe    Resepe @relation(fields: [resepe_id], references: [id])
+
+  createdAt DateTime @default(now())
 }

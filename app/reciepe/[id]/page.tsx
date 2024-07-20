@@ -9,6 +9,9 @@ import {
 } from "@/components/ui/carousel";
 import ChartRecipe from "@/components/ChartRecipe";
 import { db } from "@/utils/db";
+import { auth } from "@/auth";
+import CommetnsForm from "@/components/CommetnsForm";
+import CommentsList from "@/components/CommentsList";
 
 const categories = ["a", "da"];
 const ingredients = [
@@ -24,6 +27,9 @@ export default async function Recepe({
 }: {
   params: { id: number };
 }) {
+  const session = await auth();
+  const user = session?.user;
+
   const resepe = await db.resepe.findFirst({
     where: { id: Number(id) },
     include: {
@@ -34,10 +40,20 @@ export default async function Recepe({
           ingredient: true,
         },
       },
+
+      comments: {
+        include: {
+          user: true,
+        },
+      },
     },
   });
 
-  console.log("res", resepe);
+  // const comments = await fetch('')
+
+  // const comments = await db.comment.findMany({
+  //   where: { resepe_id: resepe?.id },
+  // });
 
   return (
     <main>
@@ -115,7 +131,13 @@ export default async function Recepe({
             <ChartRecipe />
           </div>
         </div>
-        <div>comments</div>
+        <div className="my-5">
+          <CommentsList
+            user={user}
+            comments={resepe?.comments}
+          />
+          <CommetnsForm user={user} resepeId={resepe?.id} />
+        </div>
       </div>
     </main>
   );
