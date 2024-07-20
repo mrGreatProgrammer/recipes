@@ -10,17 +10,7 @@ import {
 import ChartRecipe from "@/components/ChartRecipe";
 import { db } from "@/utils/db";
 import { auth } from "@/auth";
-import CommetnsForm from "@/components/CommetnsForm";
-import CommentsList from "@/components/CommentsList";
-
-const categories = ["a", "da"];
-const ingredients = [
-  { name: "wings", count: 23, weight: 0 },
-  { name: "dfa", count: 0, weight: 2 },
-  { name: "fsdfsds", count: 23, weight: 0 },
-];
-const name = "chicken";
-const description = "fasdffd dasf";
+import CommentsContainer from "@/components/CommentsContainer";
 
 export default async function Recepe({
   params: { id },
@@ -34,11 +24,13 @@ export default async function Recepe({
     where: { id: Number(id) },
     include: {
       images: true,
-      // categories: { include: { category: true } },
       ingredients: {
         include: {
           ingredient: true,
         },
+      },
+      categories: {
+        include: { category: true },
       },
 
       comments: {
@@ -48,12 +40,6 @@ export default async function Recepe({
       },
     },
   });
-
-  // const comments = await fetch('')
-
-  // const comments = await db.comment.findMany({
-  //   where: { resepe_id: resepe?.id },
-  // });
 
   return (
     <main>
@@ -104,10 +90,14 @@ export default async function Recepe({
                 </h2>
               ))}
             <h1 className="text-gray-900 text-3xl title-font font-medium mb-1">
-              {name}
+              {resepe?.name}
             </h1>
+            <div className="mb-10 mt-5" >
+              <p>Общая масса: {resepe?.totalWeight}g</p>
+              <p>Калории {resepe?.kkal}</p>
+            </div>
             <div>
-              <p className="text-base text-gray-700">{description}</p>
+              <p className="text-base text-gray-700">{resepe?.description}</p>
             </div>
           </div>
         </div>
@@ -128,15 +118,20 @@ export default async function Recepe({
             </ul>
           </div>
           <div className="chart-container md:w-1/2">
-            <ChartRecipe />
+            <ChartRecipe
+              carbs={resepe?.carbs}
+              fat={resepe?.fat}
+              kkal={resepe?.kkal}
+              protein={resepe?.protein}
+            />
           </div>
         </div>
         <div className="my-5">
-          <CommentsList
+          <CommentsContainer
             user={user}
             comments={resepe?.comments}
+            resepeId={resepe?.id}
           />
-          <CommetnsForm user={user} resepeId={resepe?.id} />
         </div>
       </div>
     </main>

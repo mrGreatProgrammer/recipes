@@ -9,6 +9,7 @@ import {
 } from "./ui/card";
 import { User } from "next-auth";
 import { Comment } from "@prisma/client";
+import moment from "moment";
 
 const CommentsList = ({
   user,
@@ -24,19 +25,22 @@ const CommentsList = ({
         {comments ? (
           comments.map((e) => (
             <Card
+              key={e.id}
               className={
-                e.user_id === user?.id
-                  ? `bg-blue-500 text-white self-end max-w-60`
-                  : `text-white bg-blue-700 self-start max-w-60`
+                e?.user_id === user?.id
+                  ? `bg-blue-500 text-white self-end max-w-[350px]`
+                  : `text-white bg-blue-700 self-start max-w-[350px]`
               }
             >
               <CardHeader className="flex flex-row justify-between py-4">
-                <CardTitle className="mr-14">{e.user.name} </CardTitle>
-                <p className="text-xs">{new Date(e.createdAt).getDate()}</p>
+                <CardTitle className="mr-8">{e?.user?.name} </CardTitle>
+                <p className="text-xs font-light">
+                  {moment(e?.createdAt).format("YYYY-MM-DD HH:mm")}
+                </p>
               </CardHeader>
               <CardContent className="">
                 <CardDescription className="text-white">
-                  {e.text}
+                  {e?.text}
                 </CardDescription>
               </CardContent>
             </Card>

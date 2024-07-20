@@ -17,6 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { IRecepy } from "@/types/app";
+import moment from "moment";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -24,50 +25,47 @@ interface RecepyCardProps /* extends IRecepy */ {
   name: string;
   id: number;
   images: any;
-  kkal: number
+  kkal: number;
+  createdAt?: Date;
 }
 
-const RecepyCard:React.FC<RecepyCardProps> = ({name, id, images, kkal}) => {
+const RecepyCard: React.FC<RecepyCardProps> = ({
+  name,
+  id,
+  images,
+  kkal,
+  createdAt,
+}) => {
   return (
-      <Card >
-        <Image src={"https://github.com/shadcn.png"} alt={`t-${id}-${name}`} width={350} height={100} className="rounded-md" />
-        <CardHeader>
-          <CardTitle>{name}</CardTitle>
-          <CardDescription>
-            {kkal}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-
-          {/* <form>
-            <div className="grid w-full items-center gap-4">
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="name">Name</Label>
-                <Input id="name" placeholder="Name of your project" />
-              </div>
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="framework">Framework</Label>
-                <Select>
-                  <SelectTrigger id="framework">
-                    <SelectValue placeholder="Select" />
-                  </SelectTrigger>
-                  <SelectContent position="popper">
-                    <SelectItem value="next">Next.js</SelectItem>
-                    <SelectItem value="sveltekit">SvelteKit</SelectItem>
-                    <SelectItem value="astro">Astro</SelectItem>
-                    <SelectItem value="nuxt">Nuxt.js</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-          </form> */}
-        </CardContent>
-        <CardFooter className="flex justify-between">
-          <Button variant="outline">Редактировать</Button>
-          {/* <Button   >Подробнее</Button> */}
-          <Link href={`/reciepe/${id}`} >Подробнее</Link>
-        </CardFooter>
-      </Card>
+    <Card>
+      <Image
+        src={images?.length?images[0]:"https://github.com/shadcn.png"}
+        alt={`t-${id}-${name}`}
+        width={350}
+        height={100}
+        className="rounded-md"
+      />
+      <CardHeader className="flex flex-row justify-between py-4">
+        <CardTitle className="mr-3" >{name}</CardTitle>
+        <CardDescription className="text-xs font-light" >
+            {moment(createdAt).format("YYYY-MM-DD HH:mm")}
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <CardDescription>{kkal} ккал,</CardDescription>
+      </CardContent>
+      <CardFooter className="flex justify-between">
+        <Link href={`/reciepe/${id}/edit`} className="border rounded px-3 py-2">
+          Редактировать
+        </Link>
+        <Link
+          href={`/reciepe/${id}`}
+          className="bg-primary rounded text-white px-3 py-2 hover:opacity-90 duration-150"
+        >
+          Подробнее
+        </Link>
+      </CardFooter>
+    </Card>
   );
 };
 

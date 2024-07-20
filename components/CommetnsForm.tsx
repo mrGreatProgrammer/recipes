@@ -24,13 +24,11 @@ const formSchema = z.object({
     .max(100, { message: "максимум 100 символов!" }),
 });
 
-const CommetnsForm = ({
-  user,
-  resepeId,
-}: {
+const CommetnsForm: React.FC<{
   user: User | undefined;
   resepeId: number | undefined;
-}) => {
+  setComments: React.Dispatch<React.SetStateAction<any[] | undefined>>;
+}> = ({ user, resepeId, setComments }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -38,19 +36,24 @@ const CommetnsForm = ({
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
-    fetch(`http://localhost:3000/api/comments`, {
+    const r = await fetch(`http://localhost:3000/api/comments`, {
       method: "POST",
       body: JSON.stringify({ ...values, userId: user?.id, resepeId }),
     })
       .then((r) => {
-        // toast.success("Ингридиент успешно добавлен!");
+        return r.json();
       })
       .catch((err) => {
         console.error(err);
-        // toast.error(err.message);
+        toast.error(err.message);
+      })
+      .finally(() => {
+        form.reset();
       });
+
+    setComments((prev: any) => [...prev, r.comment]);
   }
 
   React.useEffect(() => {}, []);
@@ -84,7 +87,9 @@ const CommetnsForm = ({
             )}
           />
 
-          <Button disabled={!user} type="submit">Отправить</Button>
+          <Button disabled={!user} type="submit">
+            Отправить
+          </Button>
         </form>
       </Form>
     </div>

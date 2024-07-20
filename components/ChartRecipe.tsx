@@ -17,50 +17,45 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-const chartData = [
-  { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
-  { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
-  { browser: "firefox", visitors: 287, fill: "var(--color-firefox)" },
-  { browser: "edge", visitors: 173, fill: "var(--color-edge)" },
-  { browser: "other", visitors: 190, fill: "var(--color-other)" },
-];
 
 const chartConfig = {
-  visitors: {
-    label: "Visitors",
-  },
-  chrome: {
-    label: "Chrome",
+  carbs: {
+    label: "углеводы",
     color: "hsl(var(--chart-1))",
   },
-  safari: {
-    label: "Safari",
+  protein: {
+    label: "Белки",
     color: "hsl(var(--chart-2))",
   },
-  firefox: {
-    label: "Firefox",
+  fat: {
+    label: "Жиры",
     color: "hsl(var(--chart-3))",
-  },
-  edge: {
-    label: "Edge",
-    color: "hsl(var(--chart-4))",
-  },
-  other: {
-    label: "Other",
-    color: "hsl(var(--chart-5))",
   },
 } satisfies ChartConfig;
 
-const ChartRecipe = () => {
-  const totalVisitors = React.useMemo(() => {
-    return chartData.reduce((acc, curr) => acc + curr.visitors, 0);
+
+
+const ChartRecipe: React.FC<{
+  fat: number | undefined;
+  protein: number | undefined;
+  carbs: number | undefined;
+  kkal: number | undefined;
+}> = ({ carbs, fat, kkal, protein }) => {
+  const chartData = [
+    { label: "carbs", data: carbs, fill: "var(--color-carbs)" },
+    { label: "protein", data: protein, fill: "var(--color-protein)" },
+    { label: "fat", data: fat, fill: "var(--color-fat)" },
+  ];
+
+  const total = React.useMemo(() => {
+    // @ts-ignore
+    return chartData.reduce((acc, curr) => acc + curr.data, 0);
   }, []);
 
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Pie Chart - Donut with Text</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>Нутри содержимое</CardTitle>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
@@ -74,8 +69,8 @@ const ChartRecipe = () => {
             />
             <Pie
               data={chartData}
-              dataKey="visitors"
-              nameKey="browser"
+              dataKey="data"
+              nameKey="label"
               innerRadius={60}
               strokeWidth={5}
             >
@@ -94,14 +89,15 @@ const ChartRecipe = () => {
                           y={viewBox.cy}
                           className="fill-foreground text-3xl font-bold"
                         >
-                          {totalVisitors.toLocaleString()}
+                          {/* {total.toLocaleString()} */}
+                          {kkal}
                         </tspan>
                         <tspan
                           x={viewBox.cx}
                           y={(viewBox.cy || 0) + 24}
                           className="fill-muted-foreground"
                         >
-                          Visitors
+                          Калории
                         </tspan>
                       </text>
                     );
@@ -114,10 +110,9 @@ const ChartRecipe = () => {
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
         <div className="flex items-center gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
+          <div>Жиры: {fat}g</div>
+          <div>Углеводы: {carbs}g</div>
+          <div>Белки: {protein}g</div>
         </div>
       </CardFooter>
     </Card>

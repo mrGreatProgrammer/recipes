@@ -40,53 +40,84 @@ const formSchema = z.object({
   name: z.string().min(3, {
     message: "Название должно быть не меньше трех букв",
   }),
-  carbs: z.string(),
+  carbs: z.number(),
   categories: z.any(),
   cookTimer: z.string(),
   description: z.string().min(10, { message: "Минимум 10 символа" }),
-  fat: z.string(),
-  kkal: z.string(),
-  protein: z.string(),
-  totalWeight: z.string(),
+  fat: z.number(),
+  kkal: z.number(),
+  protein: z.number(),
+  totalWeight: z.number(),
 
   ingredients: z
     .array(
       z.object({
         id: z.string(),
-        count: z.string(),
-        weight: z.string(),
+        count: z.number(),
+        weight: z.number(),
       })
     )
     .nonempty({ message: "required" }),
 });
 
-export default function CreateRecepe() {
+const EditResepeForm = ({
+  id,
+  name,
+  carbs,
+  categories: categoriesData,
+  cookTimer,
+  description,
+  fat,
+  ingredients,
+  kkal,
+  protein,
+  totalWeight,
+}: any) => {
   const [images, setImages] = React.useState<any>(null);
   const [ings, setIngs] = React.useState<Ingredient[] | undefined>();
   const [categories, setCategories] = React.useState<Category[] | undefined>();
+  const c = categoriesData?.find((e) => e)?.id;
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
+      name,
+      carbs,
+      categories: String(c),
+      cookTimer,
+      description,
+      fat,
+        ingredients: ingredients.map((e: any) => ({ ...e, id: String(e.ingredientId) })),
+      kkal,
+      protein,
+      totalWeight,
     },
   });
 
+
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values, "images", images);
-    fetch(`http://localhost:3000/api/receipe`, {
-      method: "POST",
-      body: JSON.stringify(values),
+    const data = {
+        ...values,
+        carbs: Number(values.carbs),
+        kkal: Number(values.kkal),
+        fat: Number(values.fat),
+        protein: Number(values.protein),
+        totalWeight: Number(values.totalWeight)
+    }
+    fetch(`http://localhost:3000/api/receipe/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
     })
       .then((r) => {
-        toast.success("Рецепт успешно добавлен!");
+        toast.success("Рецепт успешно изменён!");
+        // form.reset();
       })
       .catch((err) => {
         console.error(err);
         toast.error(err.message);
       })
       .finally(() => {
-        form.reset();
       });
   }
 
@@ -97,7 +128,6 @@ export default function CreateRecepe() {
       .then((r) => {
         r.json().then((res) => {
           setIngs(res);
-          console.log("rr", res);
         });
       })
       .catch((err) => console.error(err));
@@ -114,6 +144,8 @@ export default function CreateRecepe() {
     name: "ingredients",
     control: form.control,
   });
+
+  //   console.log("form", form.formState.defaultValues, "fields", form);
 
   return (
     <main>
@@ -375,4 +407,6 @@ export default function CreateRecepe() {
       </div>
     </main>
   );
-}
+};
+
+export default EditResepeForm;
