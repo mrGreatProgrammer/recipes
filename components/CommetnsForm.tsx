@@ -38,7 +38,7 @@ const CommetnsForm: React.FC<{
   const { toast } = useToast();
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const r = await fetch(`http://localhost:3000/api/comments`, {
+    const r = await fetch(`/api/comments`, {
       method: "POST",
       body: JSON.stringify({ ...values, userId: user?.id, resepeId }),
     })

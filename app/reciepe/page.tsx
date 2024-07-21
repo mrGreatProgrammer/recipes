@@ -35,27 +35,29 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 
 const formSchema = z.object({
-  name: z.string().min(3, {
+  name: z.string({ message: "объязательное поле" }).min(3, {
     message: "Название должно быть не меньше трех букв",
   }),
-  carbs: z.string(),
+  carbs: z.string({ message: "объязательное поле" }),
   categories: z.any(),
-  cookTimer: z.string(),
-  description: z.string().min(10, { message: "Минимум 10 символа" }),
-  fat: z.string(),
-  kkal: z.string(),
-  protein: z.string(),
-  totalWeight: z.string(),
+  cookTimer: z.string({ message: "объязательное поле" }),
+  description: z
+    .string({ message: "объязательное поле" })
+    .min(10, { message: "Минимум 10 символа" }),
+  fat: z.string({ message: "объязательное поле" }),
+  kkal: z.string({ message: "объязательное поле" }),
+  protein: z.string({ message: "объязательное поле" }),
+  totalWeight: z.string({ message: "объязательное поле" }),
 
   ingredients: z
     .array(
       z.object({
-        id: z.string(),
-        count: z.string(),
-        weight: z.string(),
+        id: z.string({ message: "объязательное поле" }),
+        count: z.string({ message: "объязательное поле" }),
+        weight: z.string({ message: "объязательное поле" }),
       })
     )
-    .nonempty({ message: "required" }),
+    .nonempty({ message: "объязательное поле" }),
 });
 
 export default function CreateRecepe() {
@@ -66,14 +68,11 @@ export default function CreateRecepe() {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "",
-    },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values, "images", images);
-    fetch(`http://localhost:3000/api/receipe`, {
+    fetch(`/api/receipe`, {
       method: "POST",
       body: JSON.stringify(values),
     })
@@ -96,7 +95,7 @@ export default function CreateRecepe() {
   }
 
   React.useEffect(() => {
-    fetch(`http://localhost:3000/api/ingredients`, {
+    fetch(`/api/ingredients`, {
       method: "OPTIONS",
     })
       .then((r) => {
@@ -106,7 +105,7 @@ export default function CreateRecepe() {
         });
       })
       .catch((err) => console.error(err));
-    fetch(`http://localhost:3000/api/category`, {
+    fetch(`/api/category`, {
       method: "OPTIONS",
     })
       .then((r) => {
@@ -134,7 +133,7 @@ export default function CreateRecepe() {
         </div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <div className="grid grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               <div className="space-y-2">
                 <Label htmlFor="images">Images</Label>
                 <Input
@@ -189,8 +188,6 @@ export default function CreateRecepe() {
                   </FormItem>
                 )}
               />
-            </div>
-            <div className="grid grid-cols-3 gap-5">
               <FormField
                 control={form.control}
                 name="fat"
@@ -230,8 +227,6 @@ export default function CreateRecepe() {
                   </FormItem>
                 )}
               />
-            </div>
-            <div className="grid grid-cols-3 gap-5">
               <FormField
                 control={form.control}
                 name="cookTimer"
@@ -298,7 +293,7 @@ export default function CreateRecepe() {
                   return (
                     <div
                       key={index}
-                      className="grid grid-cols-3 gap-5 border-b border-slate-500 py-5"
+                      className="grid grid-cols-1 lg:grid-cols-3 gap-5 border-b border-slate-500 py-5"
                     >
                       <FormField
                         control={form.control}

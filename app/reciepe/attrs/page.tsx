@@ -40,7 +40,7 @@ export default function CreateAttrs() {
   const { toast } = useToast();
 
   function onSubmitCategory(values: z.infer<typeof formShema>) {
-    fetch(`http://localhost:3000/api/category`, {
+    fetch(`/api/category`, {
       method: "POST",
       body: JSON.stringify(values),
     })
@@ -59,7 +59,7 @@ export default function CreateAttrs() {
       });
   }
   function onSubmitIng(values: z.infer<typeof formShema>) {
-    fetch(`http://localhost:3000/api/ingredients`, {
+    fetch(`/api/ingredients`, {
       method: "POST",
       body: JSON.stringify(values),
     })

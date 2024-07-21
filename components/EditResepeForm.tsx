@@ -34,27 +34,27 @@ import {
 import { useToast } from "./ui/use-toast";
 
 const formSchema = z.object({
-  name: z.string().min(3, {
+  name: z.string({message: "объязательное поле"}).min(3, {
     message: "Название должно быть не меньше трех букв",
   }),
-  carbs: z.number(),
+  carbs: z.number({message: "только цифры"}),
   categories: z.any(),
-  cookTimer: z.string(),
-  description: z.string().min(10, { message: "Минимум 10 символа" }),
-  fat: z.number(),
-  kkal: z.number(),
-  protein: z.number(),
-  totalWeight: z.number(),
+  cookTimer: z.string({message: "объязательное поле"}),
+  description: z.string({message: "объязательное поле"}).min(10, { message: "Минимум 10 символа" }),
+  fat: z.number({message: "только цифры"}),
+  kkal: z.number({message: "только цифры"}),
+  protein: z.number({message: "только цифры"}),
+  totalWeight: z.number({message: "только цифры"}),
 
   ingredients: z
     .array(
       z.object({
         id: z.string(),
-        count: z.number(),
-        weight: z.number(),
+        count: z.number({message: "только цифры"}),
+        weight: z.number({message: "только цифры"}),
       })
     )
-    .nonempty({ message: "required" }),
+    .nonempty({ message: "объязательное поле" }),
 });
 
 const EditResepeForm = ({
@@ -102,7 +102,7 @@ const EditResepeForm = ({
         protein: Number(values.protein),
         totalWeight: Number(values.totalWeight)
     }
-    fetch(`http://localhost:3000/api/receipe/${id}`, {
+    fetch(`/api/receipe/${id}`, {
       method: "PUT",
       body: JSON.stringify(data),
     })
@@ -125,7 +125,7 @@ const EditResepeForm = ({
   }
 
   React.useEffect(() => {
-    fetch(`http://localhost:3000/api/ingredients`, {
+    fetch(`/api/ingredients`, {
       method: "OPTIONS",
     })
       .then((r) => {
@@ -134,7 +134,7 @@ const EditResepeForm = ({
         });
       })
       .catch((err) => console.error(err));
-    fetch(`http://localhost:3000/api/category`, {
+    fetch(`/api/category`, {
       method: "OPTIONS",
     })
       .then((r) => {
@@ -162,7 +162,7 @@ const EditResepeForm = ({
         </div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <div className="grid grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               <div className="space-y-2">
                 <Label htmlFor="images">Images</Label>
                 <Input
@@ -217,8 +217,6 @@ const EditResepeForm = ({
                   </FormItem>
                 )}
               />
-            </div>
-            <div className="grid grid-cols-3 gap-5">
               <FormField
                 control={form.control}
                 name="fat"
@@ -226,7 +224,7 @@ const EditResepeForm = ({
                   <FormItem>
                     <FormLabel>Жиры</FormLabel>
                     <FormControl>
-                      <Input type="number" {...field} />
+                      <Input placeholder="Жиры грамм на 100грамм пищи" type="number" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -239,7 +237,7 @@ const EditResepeForm = ({
                   <FormItem>
                     <FormLabel>Белки</FormLabel>
                     <FormControl>
-                      <Input type="number" {...field} />
+                      <Input placeholder="Белки грамм на 100грамм пищи" type="number" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -252,14 +250,12 @@ const EditResepeForm = ({
                   <FormItem>
                     <FormLabel>Углеводы</FormLabel>
                     <FormControl>
-                      <Input type="number" {...field} />
+                      <Input placeholder="Углеводы грамм на 100грамм пищи" type="number" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-            </div>
-            <div className="grid grid-cols-3 gap-5">
               <FormField
                 control={form.control}
                 name="cookTimer"
@@ -267,7 +263,7 @@ const EditResepeForm = ({
                   <FormItem>
                     <FormLabel>Время приготовления</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input placeholder="Время в минутах" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -293,7 +289,7 @@ const EditResepeForm = ({
                   <FormItem>
                     <FormLabel>Общая масса</FormLabel>
                     <FormControl>
-                      <Input type="number" {...field} />
+                      <Input placeholder="Масса в граммах" type="number" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -326,7 +322,7 @@ const EditResepeForm = ({
                   return (
                     <div
                       key={index}
-                      className="grid grid-cols-3 gap-5 border-b border-slate-500 py-5"
+                      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 border-b border-slate-500 py-5"
                     >
                       <FormField
                         control={form.control}
@@ -362,7 +358,7 @@ const EditResepeForm = ({
                         name={`ingredients.${index}.count`}
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Количество</FormLabel>
+                            <FormLabel>Количество (шт)</FormLabel>
                             <FormControl>
                               <Input type="number" {...field} />
                             </FormControl>
@@ -376,7 +372,7 @@ const EditResepeForm = ({
                         name={`ingredients.${index}.weight`}
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Вес</FormLabel>
+                            <FormLabel>Вес (грамм)</FormLabel>
                             <FormControl>
                               <Input type="number" {...field} />
                             </FormControl>

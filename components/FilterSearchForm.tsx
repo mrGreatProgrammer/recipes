@@ -43,7 +43,7 @@ const FilterSearchForm: React.FC = () => {
   const [ings, setIngs] = React.useState<Ingredient[] | undefined>();
 
   React.useEffect(() => {
-    const res = fetch(`http://localhost:3000/api/ingredients`, {
+    const res = fetch(`/api/ingredients`, {
       method: "OPTIONS",
     })
       .then((r) => {
@@ -73,7 +73,7 @@ const FilterSearchForm: React.FC = () => {
 
   return (
     <>
-      <div className="grid grid-cols-4 gap-2">
+      <div className="grid grid-cols-2  md:grid-cols-4 gap-2">
         <Search
           placeholder="Поиск..."
           onChange={onChange}
