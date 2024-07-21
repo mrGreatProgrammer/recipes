@@ -171,7 +171,6 @@ const EditResepeForm = ({
                   type="file"
                   multiple
                   onChange={(event) => {
-                    console.log("imgs", event.target.files);
                     setImages(event);
                   }}
                 />
@@ -287,7 +286,7 @@ const EditResepeForm = ({
                 name="totalWeight"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Общая масса</FormLabel>
+                    <FormLabel>Общая масса (гм)</FormLabel>
                     <FormControl>
                       <Input placeholder="Масса в граммах" type="number" {...field} />
                     </FormControl>
@@ -372,7 +371,7 @@ const EditResepeForm = ({
                         name={`ingredients.${index}.weight`}
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Вес (грамм)</FormLabel>
+                            <FormLabel>Вес (гм)</FormLabel>
                             <FormControl>
                               <Input type="number" {...field} />
                             </FormControl>

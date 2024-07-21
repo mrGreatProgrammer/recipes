@@ -71,7 +71,6 @@ export default function CreateRecepe() {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values, "images", images);
     fetch(`/api/receipe`, {
       method: "POST",
       body: JSON.stringify(values),
@@ -101,7 +100,6 @@ export default function CreateRecepe() {
       .then((r) => {
         r.json().then((res) => {
           setIngs(res);
-          console.log("rr", res);
         });
       })
       .catch((err) => console.error(err));
@@ -195,7 +193,7 @@ export default function CreateRecepe() {
                   <FormItem>
                     <FormLabel>Жиры</FormLabel>
                     <FormControl>
-                      <Input type="number" {...field} />
+                      <Input placeholder="Жиры грамм на 100грамм пищи" type="number" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -208,7 +206,7 @@ export default function CreateRecepe() {
                   <FormItem>
                     <FormLabel>Белки</FormLabel>
                     <FormControl>
-                      <Input type="number" {...field} />
+                      <Input placeholder="Белки грамм на 100грамм пищи" type="number" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -221,7 +219,7 @@ export default function CreateRecepe() {
                   <FormItem>
                     <FormLabel>Углеводы</FormLabel>
                     <FormControl>
-                      <Input type="number" {...field} />
+                      <Input placeholder="Углеводы грамм на 100грамм пищи" type="number" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -234,7 +232,7 @@ export default function CreateRecepe() {
                   <FormItem>
                     <FormLabel>Время приготовления</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input placeholder="Время в минутах" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -258,9 +256,9 @@ export default function CreateRecepe() {
                 name="totalWeight"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Общая масса</FormLabel>
+                    <FormLabel>Общая масса (гм)</FormLabel>
                     <FormControl>
-                      <Input type="number" {...field} />
+                      <Input placeholder="Масса в граммах" type="number" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -329,7 +327,7 @@ export default function CreateRecepe() {
                         name={`ingredients.${index}.count`}
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Количество</FormLabel>
+                            <FormLabel>Количество (шт)</FormLabel>
                             <FormControl>
                               <Input type="number" {...field} />
                             </FormControl>
@@ -343,7 +341,7 @@ export default function CreateRecepe() {
                         name={`ingredients.${index}.weight`}
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Вес</FormLabel>
+                            <FormLabel>Вес (гм)</FormLabel>
                             <FormControl>
                               <Input type="number" {...field} />
                             </FormControl>
