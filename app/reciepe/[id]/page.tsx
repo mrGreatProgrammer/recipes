@@ -85,7 +85,7 @@ export default async function Recepe({
           <div>
             {resepe?.categories &&
               resepe?.categories?.map((e) => (
-                <h2 className="text-sm title-font text-gray-500 tracking-widest">
+                <h2 key={e.id} className="text-sm title-font text-gray-500 tracking-widest">
                   {e.category.name}
                 </h2>
               ))}
@@ -107,7 +107,7 @@ export default async function Recepe({
             <ul>
               {resepe?.ingredients &&
                 resepe?.ingredients?.map((e) => (
-                  <li className="flex flex-row justify-between items-center border-b py-3">
+                  <li key={e.id} className="flex flex-row justify-between items-center border-b py-3">
                     <span>{e.ingredient.name}</span>
                     <span className="decoration-dot decoration-pink-500"></span>
                     <span>
