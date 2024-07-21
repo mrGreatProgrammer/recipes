@@ -46,9 +46,9 @@ const ChartRecipe: React.FC<{
   ];
 
   const total = React.useMemo(() => {
-    // @ts-ignore
-    return chartData.reduce((acc, curr) => acc + curr.data, 0);
-  }, []);
+  //   // @ts-ignore
+  //   return chartData.reduce((acc, curr) => acc + curr.data, 0);
+  // }, []);
 
   return (
     <Card className="flex flex-col">

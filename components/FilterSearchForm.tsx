@@ -73,19 +73,28 @@ const FilterSearchForm: React.FC = () => {
 
   return (
     <>
-      <div className="grid grid-cols-3 gap-2">
+      <div className="grid grid-cols-4 gap-2">
         <Search
           placeholder="Поиск..."
           onChange={onChange}
           defaultValue={searchParams.get("query")?.toString()}
         />
         <Input
-          name="kkal"
-          placeholder="ккалории"
+          name="kkalStart"
+          placeholder="ккалории от"
           onChange={(e) => {
             onChange(e.target.name, e.target.value);
           }}
-          defaultValue={searchParams.get("kkal")?.toString()}
+          defaultValue={searchParams.get("kkalStart")?.toString()}
+          type="number"
+        />
+        <Input
+          name="kkalEnd"
+          placeholder="ккалории до"
+          onChange={(e) => {
+            onChange(e.target.name, e.target.value);
+          }}
+          defaultValue={searchParams.get("kkalEnd")?.toString()}
           type="number"
         />
         <div className="flex flex-col space-y-1.5">
