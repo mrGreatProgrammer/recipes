@@ -45,7 +45,7 @@ const ChartRecipe: React.FC<{
     { label: "fat", data: fat, fill: "var(--color-fat)" },
   ];
 
-  const total = React.useMemo(() => {
+  // const total = React.useMemo(() => {
   //   // @ts-ignore
   //   return chartData.reduce((acc, curr) => acc + curr.data, 0);
   // }, []);
