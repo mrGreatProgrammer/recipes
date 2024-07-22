@@ -7,6 +7,7 @@ interface ResipeisContainerProps {
 }
 
 const ResipeisContainer = async ({ searchParams }: ResipeisContainerProps) => {
+
   const resepes = await db.resepe.findMany({
     include: {
       images: true,
@@ -16,7 +17,7 @@ const ResipeisContainer = async ({ searchParams }: ResipeisContainerProps) => {
         },
       },
     },
-    orderBy: { createdAt: "asc" },
+    orderBy: { createdAt: "desc" },
     where: {
       OR: [
         { name: { contains: searchParams.query, mode: "insensitive" } },
@@ -28,13 +29,6 @@ const ResipeisContainer = async ({ searchParams }: ResipeisContainerProps) => {
                 name: { contains: searchParams.query, mode: "insensitive" },
               },
             },
-          },
-        },
-        { kkal: { gte: searchParams.kkalStart, lte: searchParams.kkalEnd } },
-        {
-          cookTimer: {
-            gte: searchParams.cookTimeStart,
-            lte: searchParams.cookTimeEnd,
           },
         },
       ],

@@ -34,6 +34,7 @@ function Search({
         }}
         defaultValue={defaultValue}
         name="query"
+        className="w-full"
       />
     </div>
   );
@@ -73,50 +74,12 @@ const FilterSearchForm: React.FC = () => {
 
   return (
     <>
-      <div className="grid grid-cols-2  md:grid-cols-4 gap-2">
+      <div className="">
         <Search
           placeholder="Поиск..."
           onChange={onChange}
           defaultValue={searchParams.get("query")?.toString()}
         />
-        <Input
-          name="kkalStart"
-          placeholder="ккалории от"
-          onChange={(e) => {
-            onChange(e.target.name, e.target.value);
-          }}
-          defaultValue={searchParams.get("kkalStart")?.toString()}
-          type="number"
-        />
-        <Input
-          name="kkalEnd"
-          placeholder="ккалории до"
-          onChange={(e) => {
-            onChange(e.target.name, e.target.value);
-          }}
-          defaultValue={searchParams.get("kkalEnd")?.toString()}
-          type="number"
-        />
-        <div className="flex flex-col space-y-1.5">
-          <Select
-            name="ingredients"
-            defaultValue={searchParams.get("ingredients")?.toString()}
-            onValueChange={(v) => {
-              onChange("ingredients", v);
-            }}
-          >
-            <SelectTrigger id="ingredients">
-              <SelectValue placeholder="Ингридиенты" />
-            </SelectTrigger>
-            <SelectContent position="popper">
-              {ings?.map((e) => (
-                <SelectItem key={`${e.name}-${e.id}`} value={`${e.id}`}>
-                  {e.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
       </div>
       <Toaster />
     </>
