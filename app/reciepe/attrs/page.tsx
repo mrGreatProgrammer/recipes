@@ -49,6 +49,7 @@ export default function CreateAttrs() {
           title: "Успешно!",
           description: "Категория успешна добавлена!",
         });
+        formCategories.reset();
       })
       .catch((err) => {
         console.error(err);
@@ -68,6 +69,7 @@ export default function CreateAttrs() {
           title: "Успешно!",
           description: "Ингридиент успешна добавлена!",
         });
+        formIng.reset();
       })
       .catch((err) => {
         console.error(err);

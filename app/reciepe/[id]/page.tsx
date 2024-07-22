@@ -48,7 +48,7 @@ export default async function Recepe({
           {resepe?.images?.length ? (
             <Carousel className="w-full lg:w-1/3">
               <CarouselContent>
-                {Array.from({ length: 5 }).map((_, index) => (
+                {resepe?.images?.map((image, index) => (
                   <CarouselItem key={index}>
                     <div className="">
                       <Card>
@@ -56,9 +56,9 @@ export default async function Recepe({
                           <Image
                             width={300}
                             height={300}
-                            alt="ecommerce"
+                            alt={image.altTxt}
                             className=" w-full lg:h-auto h-64 object-cover object-center rounded"
-                            src="https://github.com/shadcn.png"
+                            src={image.link}
                           />
                         </CardContent>
                       </Card>
@@ -77,7 +77,7 @@ export default async function Recepe({
                   height={300}
                   alt="ecommerce"
                   className=" w-full lg:h-auto h-64 object-cover object-center rounded"
-                  src="https://github.com/shadcn.png"
+                  src="https://dummyimage.com/600x400/333/fff"
                 />
               </CardContent>
             </Card>

@@ -80,6 +80,7 @@ export default function CreateRecepe() {
           title: "Успешно!",
           description: "Рецепт успешно добавлен!",
         });
+        form.reset();
       })
       .catch((err) => {
         console.error(err);

@@ -28,10 +28,10 @@ const RecepyCard: React.FC<RecepyCardProps> = ({
   return (
     <Card>
       <Image
-        src={images?.length?images[0]:"https://github.com/shadcn.png"}
+        src={images?.length?images[0]:"https://dummyimage.com/350x200/333/fff"}
         alt={`t-${id}-${name}`}
         width={350}
-        height={100}
+        height={200}
         className="rounded-md"
       />
       <CardHeader className="flex flex-row justify-between py-4">
