@@ -32,7 +32,7 @@ const RecepyCard: React.FC<RecepyCardProps> = ({
         alt={`t-${id}-${name}`}
         width={350}
         height={200}
-        className="rounded-md"
+        className="rounded-md max-h-44"
       />
       <CardHeader className="flex flex-row justify-between py-4">
         <CardTitle className="mr-3" >{name}</CardTitle>
