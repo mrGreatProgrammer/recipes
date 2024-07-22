@@ -75,14 +75,15 @@ const EditResepeForm = ({
   const [ings, setIngs] = React.useState<Ingredient[] | undefined>();
   const [categories, setCategories] = React.useState<Category[] | undefined>();
   const { toast } = useToast();
-  const c = categoriesData?.find((e: any) => e)?.id;
+  const category = categoriesData?.find((e: any) => e)?.id;
+  const [loading, setLoading] = React.useState<boolean>(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name,
       carbs,
-      categories: String(c),
+      categories: String(category),
       cookTimer,
       description,
       fat,
@@ -97,6 +98,7 @@ const EditResepeForm = ({
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
+    setLoading(true);
     const data = {
       ...values,
       carbs: Number(values.carbs),
@@ -124,6 +126,7 @@ const EditResepeForm = ({
       })
       .finally(() => {
         form.reset();
+        setLoading(false);
       });
   }
 
@@ -414,7 +417,9 @@ const EditResepeForm = ({
               </CardFooter>
             </Card>
 
-            <Button type="submit">Изменить рецепт</Button>
+            <Button disabled={loading} type="submit">
+              {loading ? "Публикуется..." : "Изменить рецепт"}
+            </Button>
           </form>
         </Form>
       </div>

@@ -16,15 +16,16 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
 
-const formShema = z.object( {
-    name: z.string().min(3, {
-      message: "Название должно быть не меньше трех букв",
-    }),
-    slug: z.string(),
-  }
-);
+const formShema = z.object({
+  name: z.string().min(3, {
+    message: "Название должно быть не меньше трех букв",
+  }),
+  slug: z.string(),
+});
 
 export default function CreateAttrs() {
+  const [loadingCategory, setLoadingCategory] = React.useState<boolean>(false);
+  const [loadingIng, setLoadingIng] = React.useState<boolean>(false);
   const formCategories = useForm<z.infer<typeof formShema>>({
     resolver: zodResolver(formShema),
     defaultValues: {
@@ -40,6 +41,7 @@ export default function CreateAttrs() {
   const { toast } = useToast();
 
   function onSubmitCategory(values: z.infer<typeof formShema>) {
+    setLoadingCategory(true);
     fetch(`/api/category`, {
       method: "POST",
       body: JSON.stringify(values),
@@ -58,8 +60,10 @@ export default function CreateAttrs() {
           description: "Ошибка при изменении категрии!",
         });
       });
+    setLoadingCategory(false);
   }
   function onSubmitIng(values: z.infer<typeof formShema>) {
+    setLoadingIng(true);
     fetch(`/api/ingredients`, {
       method: "POST",
       body: JSON.stringify(values),
@@ -78,6 +82,7 @@ export default function CreateAttrs() {
           description: "Ошибка при изменении ингрдиента!",
         });
       });
+    setLoadingIng(false);
   }
 
   return (
@@ -122,7 +127,9 @@ export default function CreateAttrs() {
                     )}
                   />
                 </div>
-                <Button type="submit">Добавить категорию</Button>
+                <Button disabled={loadingCategory} type="submit">
+                  {loadingCategory ? "Загрузка..." : "Добавить категорию"}
+                </Button>
               </form>
             </Form>
           </CardContent>
@@ -165,7 +172,9 @@ export default function CreateAttrs() {
                     )}
                   />
                 </div>
-                <Button type="submit">Добавить ингридиент</Button>
+                <Button disabled={loadingIng} type="submit">
+                  {loadingIng ? "Загрузка..." : "Добавить ингридиент"}
+                </Button>
               </form>
             </Form>
           </CardContent>
