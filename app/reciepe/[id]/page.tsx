@@ -46,12 +46,8 @@ export default async function Recepe({
       <div className="container mx-auto py-10">
         <div className="flex flex-col md:flex-row gap-24">
           {resepe?.images?.length ? (
-            <Carousel className="w-full lg:w-1/3">
-              <CarouselContent>
-                {resepe?.images?.map((image, index) => (
-                  <CarouselItem key={index}>
-                    <div className="">
-                      <Card>
+                resepe?.images?.map((image, index) => (
+                      <Card key={index} >
                         <CardContent className="flex aspect-square items-center justify-center">
                           <Image
                             width={300}
@@ -62,13 +58,7 @@ export default async function Recepe({
                           />
                         </CardContent>
                       </Card>
-                    </div>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious />
-              <CarouselNext />
-            </Carousel>
+                ))
           ) : (
             <Card className="w-full lg:w-1/3">
               <CardContent className="flex aspect-square items-center justify-center">

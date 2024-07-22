@@ -41,7 +41,6 @@ const ResipeisContainer = async ({ searchParams }: ResipeisContainerProps) => {
     },
   });
 
-
   return (
     <>
       {resepes ? (

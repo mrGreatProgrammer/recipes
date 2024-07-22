@@ -33,6 +33,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
+import { json } from "stream/consumers";
 
 const formSchema = z.object({
   name: z.string({ message: "объязательное поле" }).min(3, {
@@ -61,36 +62,60 @@ const formSchema = z.object({
 });
 
 export default function CreateRecepe() {
-  const [images, setImages] = React.useState<any>(null);
+  const [image, setImage] = React.useState<any>(null);
   const [ings, setIngs] = React.useState<Ingredient[] | undefined>();
   const [categories, setCategories] = React.useState<Category[] | undefined>();
   const { toast } = useToast();
+  const [loading, setLoading] = React.useState<boolean>(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    fetch(`/api/receipe`, {
+    setLoading(true);
+    const formData = new FormData();
+
+    formData.append("image", image as Blob);
+
+    fetch(`/api/upload`, {
       method: "POST",
-      body: JSON.stringify(values),
+      body: formData,
     })
-      .then((r) => {
-        toast({
-          title: "Успешно!",
-          description: "Рецепт успешно добавлен!",
-        });
-        form.reset();
+      .then(async (r) => {
+        const res = await r.json();
+        await fetch(`/api/receipe`, {
+          method: "POST",
+          body: JSON.stringify({ ...values, image: res.image.id }),
+        })
+          .then((r) => {
+            toast({
+              title: "Успешно!",
+              description: "Рецепт успешно добавлен!",
+            });
+            form.reset();
+          })
+          .catch((err) => {
+            console.error(err);
+            toast({
+              title: "Ошибка!",
+              description: "Ошибка при добавлении рецепта!",
+            });
+          })
+          .finally(() => {
+            setLoading(false);
+          });
       })
       .catch((err) => {
         console.error(err);
         toast({
           title: "Ошибка!",
-          description: "Ошибка при добавлении рецепта!",
+          description: err.message,
         });
       })
       .finally(() => {
         form.reset();
+        setLoading(false);
       });
   }
 
@@ -136,13 +161,11 @@ export default function CreateRecepe() {
               <div className="space-y-2">
                 <Label htmlFor="images">Images</Label>
                 <Input
-                  id="images"
-                  name="images"
+                  id="image"
+                  name="image"
                   type="file"
-                  multiple
                   onChange={(event) => {
-                    console.log("imgs", event.target.files);
-                    setImages(event);
+                    setImage(event.target.files?.item(0) || null);
                   }}
                 />
               </div>
@@ -194,7 +217,11 @@ export default function CreateRecepe() {
                   <FormItem>
                     <FormLabel>Жиры</FormLabel>
                     <FormControl>
-                      <Input placeholder="Жиры грамм на 100грамм пищи" type="number" {...field} />
+                      <Input
+                        placeholder="Жиры грамм на 100грамм пищи"
+                        type="number"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -207,7 +234,11 @@ export default function CreateRecepe() {
                   <FormItem>
                     <FormLabel>Белки</FormLabel>
                     <FormControl>
-                      <Input placeholder="Белки грамм на 100грамм пищи" type="number" {...field} />
+                      <Input
+                        placeholder="Белки грамм на 100грамм пищи"
+                        type="number"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -220,7 +251,11 @@ export default function CreateRecepe() {
                   <FormItem>
                     <FormLabel>Углеводы</FormLabel>
                     <FormControl>
-                      <Input placeholder="Углеводы грамм на 100грамм пищи" type="number" {...field} />
+                      <Input
+                        placeholder="Углеводы грамм на 100грамм пищи"
+                        type="number"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -259,7 +294,11 @@ export default function CreateRecepe() {
                   <FormItem>
                     <FormLabel>Общая масса (гм)</FormLabel>
                     <FormControl>
-                      <Input placeholder="Масса в граммах" type="number" {...field} />
+                      <Input
+                        placeholder="Масса в граммах"
+                        type="number"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -368,7 +407,9 @@ export default function CreateRecepe() {
               </CardFooter>
             </Card>
 
-            <Button type="submit">Опубликовать рецепт</Button>
+            <Button disabled={loading} type="submit">
+              {loading ? "Публикуется..." : "Опубликовать рецепт"}
+            </Button>
           </form>
         </Form>
       </div>

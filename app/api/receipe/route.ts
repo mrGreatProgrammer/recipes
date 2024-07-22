@@ -47,7 +47,7 @@ export async function POST(request: Request) {
     protein,
     totalWeight,
     categories,
-    images,
+    image,
     ingredients,
   } = await request.json();
 
@@ -77,9 +77,9 @@ export async function POST(request: Request) {
         },
       },
       ingredients: { createMany: { data: ings } },
+      images: { connect: { id: image } },
     },
   });
 
-
-  return Response.json({ message: "Успешно добавленно!", resepe, ings });
+  return Response.json({ message: "Успешно добавленно!" });
 }

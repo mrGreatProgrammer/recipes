@@ -28,7 +28,7 @@ const RecepyCard: React.FC<RecepyCardProps> = ({
   return (
     <Card>
       <Image
-        src={images?.length?images[0]:"https://dummyimage.com/350x200/333/fff"}
+        src={images?.length?images[0].link:"https://dummyimage.com/350x200/333/fff"}
         alt={`t-${id}-${name}`}
         width={350}
         height={200}
