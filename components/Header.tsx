@@ -24,7 +24,7 @@ const Header = async () => {
           <FilterSearchForm />
         </nav>
         {user ? (
-          <AuthNav user={user} />
+          <AuthNav />
         ) : (
           <div className="space-x-3">
             <Link

@@ -17,7 +17,7 @@ export const LoginForm = () => {
   const { toast } = useToast();
 
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get('callbackUrl') || '/profile';
+  const callbackUrl = searchParams.get('callbackUrl') || '/reciepe';
 
   const methods = useForm<LoginUserInput>({
     resolver: zodResolver(loginUserSchema),

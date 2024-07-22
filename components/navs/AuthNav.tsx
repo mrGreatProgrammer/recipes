@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import { BookPlus, ClipboardPlus, LogOut } from "lucide-react";
 import {
@@ -14,10 +13,18 @@ import {
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
 import { User } from "next-auth";
-import { signOut } from "@/auth";
 import Link from "next/link";
+import { auth, signOut } from "@/auth";
 
-const AuthNav = ({ user }: { user: User }) => {
+const AuthNav = async () => {
+  const session = await auth();
+  const user = session?.user;
+
+  const logoutAction = async () => {
+    "use server";
+    await signOut();
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -34,7 +41,7 @@ const AuthNav = ({ user }: { user: User }) => {
           >
             <path d="M5 12h14M12 5l7 7-7 7"></path>
           </svg>
-          {user.name}
+          {user?.name}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
@@ -59,9 +66,14 @@ const AuthNav = ({ user }: { user: User }) => {
           </DropdownMenuItem>
 
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => signOut({redirectTo:"/", redirect: true})}>
-            <LogOut className="mr-2 h-4 w-4" />
-            <span>Выйти</span>
+
+          <DropdownMenuItem>
+            <form action={logoutAction}>
+              <Button>
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>Выйти</span>
+              </Button>
+            </form>
           </DropdownMenuItem>
         </DropdownMenuRadioGroup>
       </DropdownMenuContent>
